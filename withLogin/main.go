@@ -29,7 +29,7 @@ func New(rawU string, rawP string, headers map[string]string, maxRetry int, prox
 		}
 		wl.Client = client
 
-		if ok, err := wl.CheckLogin(); err != nil || !ok {
+		if name, err := wl.CheckLogin(); err != nil || name == "" {
 			log.Println(err)
 			retryCnt++
 			continue
@@ -99,20 +99,21 @@ func (w *WithLogin) Post(url string, body io.Reader, headers map[string]string) 
 
 }
 
-func (w *WithLogin) CheckLogin() (bool, error) {
+func (w *WithLogin) CheckLogin() (string, error) {
 	body, err := util.Myget(w.Client, "https://one.hust.edu.cn/dcp/forward.action?path=/portal/portal&p=home", header.Headers)
 	if err != nil {
-		return false, err
+		return "", err
 	}
 
 	rest := regexp.MustCompile(`usernameandidnumber="([^"]+)"`).FindStringSubmatch(string(body))
 	if len(rest) < 2 {
 		log.Println("登陆失败")
 		log.Println(string(body))
-		return false, nil
+		return "", nil
 	} else {
-		log.Println("登录成功,欢迎：" + rest[1])
-		return true, nil
+		name := rest[1]
+		log.Println("登录成功,欢迎：" + name)
+		return name, nil
 	}
 }
 

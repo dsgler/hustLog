@@ -93,8 +93,8 @@ func LoadOrNew(rawU string, rawP string, headers map[string]string, maxRetry int
 	wl := &WithLogin{Client: client, DefaultHeaders: headers, User: rawU}
 	wl.LoadCookie(cookiePath)
 
-	ok, err := wl.CheckLogin()
-	if err != nil || !ok {
+	name, err := wl.CheckLogin()
+	if err != nil || name == "" {
 		log.Println("载入失败", err)
 		wl, err := New(rawU, rawP, headers, maxRetry, proxyURL)
 		if err != nil {

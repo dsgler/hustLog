@@ -34,3 +34,6 @@ datas/main.go
 # tmp data or storage
 oldKXIDs.json
 cookie.json
+
+*.jar
+*.aar

@@ -15,7 +15,8 @@
 
 ## 目录结构
 解释一下目录结构（其实没什么结构，随便写的）：
-- codeGifs： 测试用的验证码 gif
+- ancheck: 测试gomobile
+- codeGifs: 测试用的验证码 gif
 - datas: 拿来存账号密码的，如果你想的话
 - getWork: 一个查询劳动课的 demo
 - header: 存放一些请求头
