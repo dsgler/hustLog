@@ -2,8 +2,10 @@ package ancheck
 
 import (
 	"bytes"
+	"encoding/json"
 	"hustLog/header"
 	withlogin "hustLog/withLogin"
+	"maps"
 )
 
 type MyClient struct {
@@ -47,8 +49,12 @@ type NetRet struct {
 	Body       []byte
 }
 
-func (mc *MyClient) Get(url string) (ret *NetRet, err error) {
-	res, body, err := mc.wl.Get(url, nil)
+func (mc *MyClient) Get(url string, headerString string) (ret *NetRet, err error) {
+	var headers header.HeaderType
+	json.Unmarshal([]byte(headerString), &headers)
+	maps.Copy(headers, header.WechatHeader)
+
+	res, body, err := mc.wl.Get(url, headers)
 	if err != nil {
 		return
 	}
@@ -57,8 +63,12 @@ func (mc *MyClient) Get(url string) (ret *NetRet, err error) {
 	return
 }
 
-func (mc *MyClient) Post(url string, body []byte) (ret *NetRet, err error) {
-	res, body, err := mc.wl.Post(url, bytes.NewReader(body), nil)
+func (mc *MyClient) Post(url string, body []byte, headerString string) (ret *NetRet, err error) {
+	var headers header.HeaderType
+	json.Unmarshal([]byte(headerString), &headers)
+	maps.Copy(headers, header.WechatHeader)
+
+	res, body, err := mc.wl.Post(url, bytes.NewReader(body), headers)
 	if err != nil {
 		return
 	}
